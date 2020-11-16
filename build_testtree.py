@@ -7,7 +7,7 @@ import os
 import datetime
 
 poss_dirs = ['spam', 'egg', 'chips', 'mushrooms']
-MAX_DEPTH=5
+MAX_DEPTH=6
 
 def mkdirs(indir="test_tree", depth=0):
     """ Make the directories. """
