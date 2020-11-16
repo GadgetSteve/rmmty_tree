@@ -20,11 +20,11 @@ def parse_args(argv: dict):
     parser.add_argument("start_dir", nargs='+', help="Directory that you wish to processes, more than one may be given")
     return parser.parse_args(argv)
 
-def rmmt(start_dir: str) -> int:
-    """ Traverse the directory tree removind empty ones."""
+def pass_rmmt(start_dir: str, start_count: int=0) -> int:
+    """ Traverse the directory tree removing empty ones."""
     count = 0
     adir = pathlib.Path(start_dir)
-    #print("Processing", adir, end=' ')
+    print("Processing", adir)
     if len(start_dir) > 100:
         print("Possible Long Path Problem!")
     if not os.path.exists(adir):
@@ -37,17 +37,24 @@ def rmmt(start_dir: str) -> int:
             time.sleep(0.001)
             count += 1
             if count % 100 == 0:
-                print(f"{count=} {root=}")
+                print(f"\r{count=}", end='')
         elif files:
             print(f"{root}: and acestors left as has {len(files)} files")
             time.sleep(0.001)
         #else:
         #    print(f"{root=} {len(dirs)=}")
-    else:
-        print("No Walk!")
+    #else:
+    #    print("No Walk!")
     print(count, "empty directories removed")
     return count
-    
+
+
+def rmmt(start_dir: str) -> int:
+    """ Traverse the directory tree removing empty ones in multiple passes."""
+    total = 0
+    while deleted := pass_rmmt(start_dir, total):
+        total += deleted
+    return total
 
 if __name__ == "__main__":
     ST = datetime.datetime.now()
